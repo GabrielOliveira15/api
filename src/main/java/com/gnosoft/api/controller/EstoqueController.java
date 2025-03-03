@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.gnosoft.api.model.BalanceamentoTransferencia;
 import com.gnosoft.api.model.dto.CalculoEstoqueRequestDTO;
+import com.gnosoft.api.model.dto.RespostaSuprimento;
 import com.gnosoft.api.service.EstoqueService;
 
 @RestController
@@ -20,8 +20,7 @@ public class EstoqueController {
     private EstoqueService estoqueService;
 
     @PostMapping("/balancear")
-    public List<BalanceamentoTransferencia> balancearEstoques(@RequestBody CalculoEstoqueRequestDTO dados) {
-        System.out.println("Peças: " + dados.estoques().toString());
+    public RespostaSuprimento balancearEstoques(@RequestBody CalculoEstoqueRequestDTO dados) {
         return estoqueService.calcularEstoqueIdeal(dados.estoques(), dados.semanasCobertura());
     }
 }
