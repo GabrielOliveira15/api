@@ -1,7 +1,6 @@
 package com.gnosoft.api.service;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,7 +43,7 @@ public class EstoqueService {
 
         for (Peca item : pecasUnicas) {
 
-            // Separar lojas com excesso e com falta
+            // Listas criadas para separar lojas com excesso e com falta
             List<LojasComEstoqueBalanc> lojasComExcesso = new ArrayList<>();
             List<LojasComEstoqueBalanc> lojasComFalta = new ArrayList<>();
 
@@ -65,44 +64,47 @@ public class EstoqueService {
                 }
             });
                       
-            // Realizar transferências 
-            
-            for (LojasComEstoqueBalanc lojaFaltando : lojasComFalta) {
-                int necessidade = Math.abs(lojaFaltando.getQtd() - lojaFaltando.getEstoqueIdeal());
+        // Realizar transferências
+        for (LojasComEstoqueBalanc lojaFaltando : lojasComFalta) {
+            int necessidade = lojaFaltando.getEstoqueIdeal() - lojaFaltando.getQtd();
 
-                Iterator<LojasComEstoqueBalanc> iterator = lojasComExcesso.iterator();
-                while (iterator.hasNext() && necessidade > 0) {
-                    LojasComEstoqueBalanc lojaExcesso = iterator.next();
-                    int excessoDisponivel = lojaExcesso.getQtd() - lojaExcesso.getEstoqueIdeal();
+            for (int i = 0; i < lojasComExcesso.size() && necessidade > 0; ) {
+                LojasComEstoqueBalanc lojaExcesso = lojasComExcesso.get(i);
+                int excessoDisponivel = lojaExcesso.getQtd() - lojaExcesso.getEstoqueIdeal();
 
+                if (excessoDisponivel > 0) {
                     int quantidadeTransferencia = Math.min(necessidade, excessoDisponivel);
 
-                    if (quantidadeTransferencia > 0) {
-                        transferencias.add(new BalanceamentoTransferencia(
-                            item.getCodigo(),
-                            lojaExcesso.getLoja(),
-                            lojaFaltando.getLoja(),
-                            quantidadeTransferencia
-                        ));
+                    transferencias.add(new BalanceamentoTransferencia(
+                        item.getCodigo(),
+                        lojaExcesso.getLoja(),
+                        lojaFaltando.getLoja(),
+                        quantidadeTransferencia
+                    ));
 
-                        // Atualizar valores
-                        lojaExcesso.setQtd(lojaExcesso.getQtd() - quantidadeTransferencia);
-                        lojaFaltando.setQtd(lojaFaltando.getQtd() + quantidadeTransferencia);
-                        necessidade -= quantidadeTransferencia;
-                    }
+                    // Atualizar os valores das lojas
+                    lojaExcesso.setQtd(lojaExcesso.getQtd() - quantidadeTransferencia);
+                    lojaFaltando.setQtd(lojaFaltando.getQtd() + quantidadeTransferencia);
+                    necessidade -= quantidadeTransferencia;
 
-                    // Se loja não tiver mais excesso, remover da lista
+                    // Se a loja não tiver mais excesso, remover da lista
                     if (lojaExcesso.getQtd() <= lojaExcesso.getEstoqueIdeal()) {
-                        iterator.remove();
+                        lojasComExcesso.remove(i);
+                    } else {
+                        i++; // Avançar o índice somente se o item não for removido
                     }
-                }
-
-                // Se ainda restar necessidade, comprar a quantidade restante
-                if (necessidade > 0) {
-                    pecasComprar.add(new PecaComprar(lojaFaltando.getLoja(), item.getCodigo(), necessidade));
-                    System.out.println("Comprar " + necessidade + " peças do item " + item.getCodigo() + " para a loja " + lojaFaltando.getLoja());
+                } else {
+                    i++;
                 }
             }
+
+            // Recalcular necessidade após as transferências
+            int necessidadeFinal = lojaFaltando.getEstoqueIdeal() - lojaFaltando.getQtd();
+            if (necessidadeFinal > 0) {
+                pecasComprar.add(new PecaComprar(lojaFaltando.getLoja(), item.getCodigo(), necessidadeFinal));
+                System.out.println("Comprar " + necessidadeFinal + " peças do item " + item.getCodigo() + " para a loja " + lojaFaltando.getLoja());
+            }
+        }
         }
         return new RespostaSuprimento(transferencias, pecasComprar);
     } 
