@@ -23,7 +23,7 @@ public class EstoqueService {
         estoques.forEach(estoque -> {
             // Estoque Ideal = quantidade de vendas do últ. 12m / 12 / 4 * semanas de cobertura;
             Integer estoqueIdeal = (int) Math.round((((double) estoque.qtdVendas() / 12) / 4) * semanasCobertura);
-            pecas.add(new Peca(estoque.loja(), estoque.codigo(), estoque.descricao(), estoque.quantidade(), estoque.qtdVendas(), estoque.qtdPop(), estoqueIdeal, estoque.qtd_pendente()));
+            pecas.add(new Peca(estoque.loja(), estoque.codigo(), estoque.descricao(), estoque.quantidade() + estoque.qtd_pendente(), estoque.qtdVendas(), estoque.qtdPop(), estoqueIdeal, estoque.qtd_pendente()));
         }); 
         return balancearEstoque();
     }
