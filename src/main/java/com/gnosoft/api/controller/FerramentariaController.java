@@ -10,10 +10,10 @@ import com.gnosoft.api.model.EstoqueFerramentaria;
 import com.gnosoft.api.model.Ferramenta;
 import com.gnosoft.api.model.MovimentacaoFerramenta;
 import com.gnosoft.api.model.dto.CadastraFerramenta;
-import com.gnosoft.api.model.dto.RecebeCodigo;
 import com.gnosoft.api.model.dto.RegistraMovFerramentaria;
 import com.gnosoft.api.service.FerramentariaService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 
 @RestController
@@ -41,9 +41,9 @@ public class FerramentariaController {
         )));
     }
     
-    @GetMapping("consultar")
-    public ResponseEntity<EstoqueFerramentaria> consultarEstoqueFerramenta(@RequestBody RecebeCodigo dados) {
-        return ResponseEntity.ok(ferramentariaService.consultarEstoqueFerramenta(dados.codigo()));
+    @GetMapping("consultar/{codigo}")
+    public ResponseEntity<EstoqueFerramentaria> consultarEstoqueFerramenta(@PathVariable String codigo) {
+        return ResponseEntity.ok(ferramentariaService.consultarEstoqueFerramenta(codigo));
     }
     
 }
