@@ -6,6 +6,7 @@ import lombok.*;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 @Entity
 @Table(name = "movimentacao_ferramenta")
@@ -36,7 +37,12 @@ public class MovimentacaoFerramenta {
     private String tecnico;
 
     @Column(nullable = false, updatable = false)
-    private LocalDateTime dataMovimentacao = LocalDateTime.ofInstant(Instant.now(), ZoneId.of("America/Sao_Paulo"));
+    private LocalDateTime dataMovimentacao;
+
+    @PrePersist
+    protected void prePersist() {
+        this.dataMovimentacao = ZonedDateTime.now(ZoneId.of("America/Sao_Paulo")).toLocalDateTime();
+    }
 
     public MovimentacaoFerramenta(Ferramenta ferramenta, TipoMovimentacao tipoMovimentacao, Integer quantidade, String tecnico) {
         this.ferramenta = ferramenta;

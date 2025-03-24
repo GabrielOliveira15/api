@@ -1,5 +1,6 @@
 package com.gnosoft.api.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -126,4 +127,13 @@ public class FerramentariaService {
         return mensagem;
     }
 
+    // Consulta as ferramentas disponíveis
+    public List<EstoqueFerramentaria> consultarFerramentasDisponiveis() {
+        return estoqueFerramentaRepository.findByQuantidadeDisponivelGreaterThan(0);
+    }
+
+    // Consulta as ferramentas reservadas
+    public List<EstoqueFerramentaria> consultarFerramentasReservadas() {
+        return estoqueFerramentaRepository.findByQuantidadeReservadaGreaterThan(0);
+    }
 }

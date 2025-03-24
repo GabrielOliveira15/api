@@ -1,5 +1,7 @@
 package com.gnosoft.api.controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -45,5 +47,14 @@ public class FerramentariaController {
     public ResponseEntity<EstoqueFerramentaria> consultarEstoqueFerramenta(@PathVariable String codigo) {
         return ResponseEntity.ok(ferramentariaService.consultarEstoqueFerramenta(codigo));
     }
+
+    @GetMapping("disponiveis")
+    public ResponseEntity<List<EstoqueFerramentaria>> consultarFerramentasDisponiveis() {
+        return ResponseEntity.ok(ferramentariaService.consultarFerramentasDisponiveis());
+    }
     
+    @GetMapping("reservadas")
+    public ResponseEntity<List<EstoqueFerramentaria>> consultarFerramentasReservadas() {
+        return ResponseEntity.ok(ferramentariaService.consultarFerramentasReservadas());
+    }
 }
