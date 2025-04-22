@@ -1,7 +1,13 @@
 package com.gnosoft.api.model.dto;
 
-import com.gnosoft.api.model.TipoMovimentacao;
+import java.util.List;
 
-public record RegistraMovFerramentaria(String codigoFerramenta, TipoMovimentacao tipoMovimentacao, Integer quantidade, String tecnico) {
+import com.gnosoft.api.model.Ferramentaria.TipoMovimentacao;
+
+public record RegistraMovFerramentaria(String codigoFilial, 
+                                       TipoMovimentacao tipoMovimentacao, 
+                                       String matriculaColaborador, 
+                                       List<RecebeFerramentaQuantidadeReserva> ferramentas,
+                                       Long idReserva) {
     
 }

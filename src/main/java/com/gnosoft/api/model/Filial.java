@@ -9,27 +9,23 @@ import jakarta.persistence.Table;
 import lombok.*;
 
 @Entity
-@Table(name = "ferramenta")
+@Table(name = "filial")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class Ferramenta {
-    
-    @Id
+public class Filial {
+    @Id 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
 
-    @Column(name = "codigo", unique = true)
+    @Column(nullable = false, unique = true)
     private String codigo;
 
-    @Column(name = "descricao")
-    private String descricao;
+    @Column(nullable = false)
+    private String nome;
 
-    public Ferramenta(String codigo, String descricao) {
-        this.codigo = codigo;
-        this.descricao = descricao;
-    }
+    @Column(nullable = false)
+    private String cidade;
 }

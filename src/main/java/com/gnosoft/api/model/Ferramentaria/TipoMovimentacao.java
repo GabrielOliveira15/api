@@ -1,4 +1,4 @@
-package com.gnosoft.api.model;
+package com.gnosoft.api.model.Ferramentaria;
 
 public enum TipoMovimentacao {
     ENTRADA,

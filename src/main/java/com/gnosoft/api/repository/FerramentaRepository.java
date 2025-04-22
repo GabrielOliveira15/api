@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.gnosoft.api.model.Ferramenta;
+import com.gnosoft.api.model.Ferramentaria.Ferramenta;
 
 @Repository
 public interface FerramentaRepository extends JpaRepository<Ferramenta, Long> {
